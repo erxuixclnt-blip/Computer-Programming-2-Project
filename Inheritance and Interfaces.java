@@ -1,79 +1,138 @@
-public class Main {
+// VERSION 1 //
+import java.util.Scanner;
 
-    public static void main(String[] args) {
+interface AllowanceCalculator {
+    double computeAllowance(double dailyAllowance, int weeks);
+}
 
-        // INTEGER VARIABLE TYPE //
-        int year = 2026;
-        int age = 21;
-        int quantity = 10;
+interface IncreaseCalculator {
+    double applyIncrease(double allowance);
+}
 
-        System.out.println("The year is " + year);
-        System.out.println("My age is " + age);
-        System.out.println("The quantity is " + quantity);
+class AllowanceTracker implements AllowanceCalculator, IncreaseCalculator {
 
-        // DOUBLE VARIABLE TYPE //
-        double price = 86.3;
-        double check = 16.7;
-        double temperature = -30.6;
+    @Override
+    public double computeAllowance(double dailyAllowance, int weeks) {
+        int days = weeks * 7;
+        return dailyAllowance * days;
+    }
 
-        System.out.println("$" + price);
-        System.out.println("Check my number is " + check);
-        System.out.println("The temperature is " + temperature);
-
-        // CHARACTER VARIABLE TYPE //
-        char grade = 'B';
-        char symbol = '?';
-        char currency = '$';
-
-        System.out.println("The second to the highest grade is " + grade);
-        System.out.println("The symbol is " + symbol);
-        System.out.println("The currency is " + currency);
-
-        // BOOLEAN VARIABLE TYPE //
-        boolean isGood = true;
-        boolean iwannaKnow = false;
-        boolean operatorsDone = true;
-
-        System.out.println(isGood);
-        if (isGood) {
-            System.out.println("You are good");
-        } else {
-            System.out.println("You are not good");
-        }
-
-        System.out.println(iwannaKnow);
-        if (iwannaKnow) {
-            System.out.println("I wanna know, do you think?");
-        } else {
-            System.out.println("I don't wanna know, do you think?");
-        }
-
-        System.out.println(operatorsDone);
-        if (operatorsDone) {
-            System.out.println("Your operation is well done!");
-        } else {
-            System.out.println("Your operation is not done well");
-        }
-
-        // STRING REFERENCE TYPE //
-        String name = "Ahron";
-        String food = "Adobong manok";
-        String hobbies = "Playing computer games and studying";
-
-        System.out.println("Hello! " + name);
-        System.out.println("My favorite food is " + food);
-        System.out.println("My hobbies are " + hobbies);
-
-   // ARRAY REFERENCE TYPE //
-       int[] numbers = {10, 20, 30, 40, 50};
-        System.out.println(numbers[0]); // 10
-        System.out.println(numbers[2]); // 30
-       
+    @Override
+    public double applyIncrease(double allowance) {
+        return allowance * 1.03; // 3% increase
     }
 }
-    
 
-        
-    
+public class Main {
+    public static void main(String[] args) {
 
+        Scanner input = new Scanner(System.in);
+        AllowanceTracker tracker = new AllowanceTracker();
 
+        System.out.print("Enter daily allowance: ");
+        double dailyAllowance = input.nextDouble();
+
+        int totalSemesters = 6;
+        int weeksPerSemester = 18;
+
+        for (int semester = 1; semester <= totalSemesters; semester++) {
+
+            double allowance = tracker.computeAllowance(dailyAllowance, weeksPerSemester);
+
+            // Apply increase every 2 semesters
+            if (semester % 2 == 0) {
+                allowance = tracker.applyIncrease(allowance);
+                dailyAllowance *= 1.03;
+                System.out.println("\nSemester " + semester + " (3% Increase Applied)");
+            } else {
+                System.out.println("\nSemester " + semester);
+            }
+
+            System.out.printf("Daily Allowance: %.2f\n", dailyAllowance);
+            System.out.printf("Total Allowance: %.2f\n", allowance);
+        }
+
+        input.close();
+    }
+}
+
+// VERSION 2 //
+
+import java.util.Scanner;
+
+interface AllowancePolicy {
+    double calculate(double dailyAllowance, int weeks);
+}
+
+interface IncreasePolicy {
+    double increase(double value);
+}
+
+class StandardAllowancePolicy implements AllowancePolicy {
+
+    @Override
+    public double calculate(double dailyAllowance, int weeks) {
+        int totalDays = weeks * 7;
+        return dailyAllowance * totalDays;
+    }
+}
+
+class ThreePercentIncreasePolicy implements IncreasePolicy {
+
+    @Override
+    public double increase(double value) {
+        return value * 1.03;
+    }
+}
+
+class SemesterTracker {
+
+    private final AllowancePolicy allowancePolicy;
+    private final IncreasePolicy increasePolicy;
+
+    private static final int TOTAL_SEMESTERS = 6;
+    private static final int WEEKS_PER_SEMESTER = 18;
+
+    public SemesterTracker(AllowancePolicy allowancePolicy, IncreasePolicy increasePolicy) {
+        this.allowancePolicy = allowancePolicy;
+        this.increasePolicy = increasePolicy;
+    }
+
+    public void run(double dailyAllowance) {
+
+        for (int semester = 1; semester <= TOTAL_SEMESTERS; semester++) {
+
+            double totalAllowance = allowancePolicy.calculate(dailyAllowance, WEEKS_PER_SEMESTER);
+
+            if (semester % 2 == 0) {
+                totalAllowance = increasePolicy.increase(totalAllowance);
+                dailyAllowance = increasePolicy.increase(dailyAllowance);
+
+                System.out.println("\nSemester " + semester + " (Increase Applied)");
+            } else {
+                System.out.println("\nSemester " + semester);
+            }
+
+            System.out.printf("Daily Allowance: %.2f\n", dailyAllowance);
+            System.out.printf("Total Allowance: %.2f\n", totalAllowance);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter daily allowance: ");
+        double dailyAllowance = input.nextDouble();
+
+        AllowancePolicy allowancePolicy = new StandardAllowancePolicy();
+        IncreasePolicy increasePolicy = new ThreePercentIncreasePolicy();
+
+        SemesterTracker tracker = new SemesterTracker(allowancePolicy, increasePolicy);
+        tracker.run(dailyAllowance);
+
+        input.close();
+    }
+}
