@@ -228,3 +228,100 @@ public class ArithmeticFixed {
         System.out.println("Program finished safely.");
     }
 }
+
+
+// Arithmetic and NonSuchElement
+
+import java.util.Scanner;
+import java.util.NoSuchElementException;
+
+public class NoSuchElementFixed {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.println("Please enter a number:");
+
+           
+            int number = sc.nextInt();
+
+            System.out.println("You entered: " + number);
+        } catch (NoSuchElementException e) {
+           
+            System.out.println("Oops! It looks like you didn't provide any input.");
+            e.printStackTrace(); 
+        } finally {
+            sc.close(); 
+            System.out.println("Scanner closed. The program has finished running safely.");
+        }
+    }
+}
+
+ArithMeticException
+
+package com.mycompany.arithmeticfixed;
+
+public class ArithmeticFixed {
+
+    public static void main(String[] args) {
+        int numerator = 10;
+        int denominator = 0;
+
+        try {
+            
+            if (denominator == 0) {
+                throw new ArithmeticException("Cannot divide by zero!");
+            }
+
+            int result = numerator / denominator;
+            System.out.println("Result: " + result);
+
+        } catch (ArithmeticException e) {
+           
+            System.out.println("Error: " + e.getMessage());
+        }
+
+finally {
+    System.out.print("Arithmetic is Completed.");
+     
+    System.out.println("Program finished safely.");
+      
+      
+    
+    }
+}
+}
+
+RuntimeException
+package com.mycompany.runtimefixed;
+
+
+public class RuntimeFixed {
+
+public static void main(String[] args) {
+   int numerator = 10;
+int denominator = 0;
+
+try {
+
+if (denominator == 0) {
+throw new ArithmeticException("Oops! You can't divide by zero!");
+     }
+int result = numerator / denominator;
+System.out.println("Result: " + result);
+
+    
+} catch (ArithmeticException e) {
+System.out.println("Error: " + e.getMessage());
+    }
+
+finally {
+
+ System.out.println("Runtime Is over.");
+    
+ System.out.println("The program keeps running");
+}
+   
+ }
+}
