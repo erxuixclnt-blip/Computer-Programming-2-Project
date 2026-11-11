@@ -45,7 +45,6 @@ Error Version
 public class ArrayError {
     public static void main(String[] args) {
         int[] numbers = {10, 20, 30};
-        // Error: index 5 does not exist
         System.out.println(numbers[5]);
     }
 }
@@ -103,7 +102,6 @@ public class IOExceptionFixed {
     public static void main(String[] args) {
         String fileName = "mytestfile.txt";
 
-        // Step 1: Create and write to the file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("Hello! This file was created successfully.");
             System.out.println("Step 1: File created successfully!");
@@ -230,7 +228,6 @@ public class ArithmeticFixed {
 }
 
 
-// Arithmetic and NonSuchElement
 
 import java.util.Scanner;
 import java.util.NoSuchElementException;
